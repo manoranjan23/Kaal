@@ -106,3 +106,63 @@ async def gen_thumb(videoid, user_id):
             im = Image.open(f"cache/chop{videoid}.png").convert("RGBA")
             add_corners(im)
             im.save(f"cache/cropped{videoid}.png")
+            crop_img = Image.open(f"cache/cropped{videoid}.png")
+        logo = crop_img.convert("RGBA")
+        logo.thumbnail((365, 365), Image.ANTIALIAS)
+        width = int((1280 - 365) / 2)
+        background = Image.open(f"cache/temp{videoid}.png")
+        background.paste(logo, (width + 2, 138), mask=logo)
+        background.paste(x, (710, 427), mask=x)
+        background.paste(image3, (0, 0), mask=image3)
+
+        draw = ImageDraw.Draw(background)
+        font = ImageFont.truetype("SlayerX/assets/font2.ttf", 45)
+        arial = ImageFont.truetype("SlayerX/assets/font2.ttf", 30)
+        para = textwrap.wrap(title, width=32)
+        try:
+            draw.text(
+                (450, 25),
+                f"STARTED PLAYING",
+                fill="white",
+                stroke_width=3,
+                stroke_fill="grey",
+                font=font,
+            )
+            if para[0]:
+                text_w, text_h = draw.textsize(f"{para[0]}", font=font)
+                draw.text(
+                    ((1280 - text_w) / 2, 530),
+                    f"{para[0]}",
+                    fill="white",
+                    stroke_width=1,
+                    stroke_fill="white",
+                    font=font,
+                )
+            if para[1]:
+                text_w, text_h = draw.textsize(f"{para[1]}", font=font)
+                draw.text(
+                    ((1280 - text_w) / 2, 580),
+                    f"{para[1]}",
+                    fill="white",
+                    stroke_width=1,
+                    stroke_fill="white",
+                    font=font,
+                )
+        except:
+            pass
+        text_w, text_h = draw.textsize(f"Duration: {duration} Mins", font=arial)
+        draw.text(
+            ((1280 - text_w) / 2, 660),
+            f"Duration: {duration} Mins",
+            fill="white",
+            font=arial,
+        )
+        try:
+            os.remove(f"cache/thumb{videoid}.png")
+        except:
+            pass
+        background.save(f"cache/{videoid}_{user_id}.png")
+        return f"cache/{videoid}_{user_id}.png"
+    except Exception as e:
+        print(e)
+        return YOUTUBE_IMG_URL
