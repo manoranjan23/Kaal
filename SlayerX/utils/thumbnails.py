@@ -4,6 +4,7 @@ import os
 import re
 import aiofiles
 import aiohttp
+from SlayerX import app
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 from youtubesearchpython.future import VideosSearch
 
