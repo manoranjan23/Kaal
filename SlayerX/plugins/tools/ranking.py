@@ -107,7 +107,7 @@ async def today_(_, message):
 
 
 
-@app.on_message(filters.command("ranking"))
+@app.on_message(filters.command("rankings"))
 async def ranking(_, message):
     top_members = collection.find().sort("total_messages", -1).limit(10)
 
